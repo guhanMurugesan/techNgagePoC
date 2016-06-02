@@ -1,4 +1,5 @@
-﻿var directionsService;
+var directionsService;
+var map;
 var selectedCategory = 5;//default road color
 var userMapUrl = '../Views/Index.htm';
 var liveMapUrl = '../Views/LiveMap.htm';
@@ -18,12 +19,13 @@ $(document).ready(function () {
 function initialize() {
     directionsService = new google.maps.DirectionsService();
     //map created
-    var map = new google.maps.Map(document.getElementById('livemap'), {
+    map = new google.maps.Map(document.getElementById('livemap'), {
         disableDefaultUI: false,
         zoom:10,
         mapTypeId: google.maps.MapTypeId.TERRAIN
     });
-    lookUpMapCollection(map, directionsService);
+    lookUpMapCollection(map, directionsService)
+    google.maps.event.addListenerOnce(map, 'idle', AppDefaultZoom);
 }
 
 function lookUpMapCollection(map, directionsService)
@@ -46,4 +48,8 @@ function calculateAndDisplayRoute(map,directionsService, directionsDisplay, orig
             window.alert('Directions request failed due to ' + status);
         }
     });
+}
+function AppDefaultZoom()
+{
+    map.setZoom(17);
 }
